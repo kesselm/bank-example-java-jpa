@@ -26,6 +26,6 @@ public class Bank {
 //                                CascadeType.DETACH, CascadeType.REFRESH})
 
     @OneToMany(fetch = FetchType.LAZY)
-    public List<Konto> kontos;
+    public List<Konto> kontos = new ArrayList<>();
 
 }

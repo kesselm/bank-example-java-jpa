@@ -1,0 +1,6 @@
+INSERT INTO bank (name, address, comment, date) VALUES ('Bank 1', 'Address 1', 'Comment 1', '2023-09-17');
+INSERT INTO bank (name, address, comment, date) VALUES ('Bank 2', 'Address 2', 'Comment 2', '2023-09-17');
+INSERT INTO bank (name, address, comment, date) VALUES ('Bank 3', 'Address 3', 'Comment 3', '2023-09-17');
+INSERT INTO bank (name, address, comment, date) VALUES ('Bank 4', 'Address 4', 'Comment 4', '2023-09-17');
+INSERT INTO bank (name, address, comment, date) VALUES ('Bank 5', 'Address 5', 'Comment 5', '2023-09-17');
+INSERT INTO bank (name, address, comment, date) VALUES ('Bank 6', 'Address 6', 'Comment 6', '2023-09-17');

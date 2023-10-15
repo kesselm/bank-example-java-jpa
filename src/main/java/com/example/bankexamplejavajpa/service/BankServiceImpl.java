@@ -1,16 +1,19 @@
 package com.example.bankexamplejavajpa.service;
 
-import com.example.bankexamplejavajpa.dao.BankDAO;
 import com.example.bankexamplejavajpa.entities.Bank;
+import com.example.bankexamplejavajpa.entities.Konto;
 import com.example.bankexamplejavajpa.repository.BankRepository;
-import com.example.bankexamplejavajpa.util.EntityUtils;
+import com.example.bankexamplejavajpa.service.interfaces.BankService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
+@Log4j2
 public class BankServiceImpl implements BankService {
 
     private BankRepository bankRepository;
@@ -22,15 +25,39 @@ public class BankServiceImpl implements BankService {
 
 
     @Override
-    public BankDAO saveBank(BankDAO bankDAO) {
-        Bank bank = bankRepository.save(EntityUtils.convertFromBankDAO(bankDAO));
-        return EntityUtils.convertFromBank(bank);
+    public Bank saveBank(Bank bank) {
+        return bankRepository.save(bank);
     }
 
     @Override
-    public List<BankDAO> getBankList() {
-        return bankRepository.findAll().stream().map(bank -> EntityUtils.convertFromBank(bank))
-                .collect(Collectors.toList());
+    public List<Bank> getBankList() {
+        return bankRepository.findAll();
+    }
+
+    @Override
+    public Optional<Bank> getBankById(Long id) {
+        return bankRepository.findById(id);
+    }
+
+    @Override
+    public void deleteBank(Bank bank) {
+        bankRepository.delete(bank);
+        log.info("Bank object {} is deleted", bank.getId());
+    }
+
+    @Override
+    public void deleteBankById(Long id) {
+        bankRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Konto> getKontoList(Long id) {
+        Optional<Bank> bank = bankRepository.findById(id);
+        if(bank.isPresent()) {
+            return bank.get().getKontos();
+        } else {
+            return Arrays.asList();
+        }
     }
 
 }
