@@ -6,12 +6,12 @@ import java.util.*;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
-@Entity
-@Table(name="bank")
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name="bank")
 public class Bank {
 
     @Id
@@ -21,9 +21,6 @@ public class Bank {
     private String address;
     private String comment;
     private LocalDate date;
-
-//    @OneToMany(mappedBy = "bank", cascade={CascadeType.PERSIST, CascadeType.MERGE,
-//                                CascadeType.DETACH, CascadeType.REFRESH})
 
     @OneToMany(fetch = FetchType.LAZY)
     public List<Konto> kontos = new ArrayList<>();

@@ -1,8 +1,10 @@
 package com.example.bankexamplejavajpa.util;
 
 import com.example.bankexamplejavajpa.dao.BankDAO;
+import com.example.bankexamplejavajpa.dao.BuchungssatzDAO;
 import com.example.bankexamplejavajpa.dao.KontoDAO;
 import com.example.bankexamplejavajpa.entities.Bank;
+import com.example.bankexamplejavajpa.entities.Buchungssatz;
 import com.example.bankexamplejavajpa.entities.Konto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -11,41 +13,52 @@ import lombok.NoArgsConstructor;
 public class EntityUtils {
 
     public static Bank convertFromBankDAO(BankDAO bankDAO) {
-        Bank bank = new Bank();
-        bank.setId(bankDAO.getId());
-        bank.setName(bankDAO.getName());
-        bank.setAddress(bankDAO.getAddress());
-        bank.setComment(bank.getComment());
-        bank.setDate(bank.getDate());
-        return bank;
+        return Bank.builder()
+                .id(bankDAO.id())
+                .name(bankDAO.name())
+                .address(bankDAO.address())
+                .comment(bankDAO.comment())
+                .date(bankDAO.date())
+                .build();
     }
 
     public static BankDAO convertFromBank(Bank bank){
-        BankDAO bankDAO = new BankDAO();
-        bankDAO.setId(bank.getId());
-        bankDAO.setName(bank.getName());
-        bankDAO.setAddress(bank.getAddress());
-        bankDAO.setComment(bank.getComment());
-        bankDAO.setDate(bank.getDate());
-        return bankDAO;
+        return new BankDAO(bank.getId(), bank.getName(), bank.getAddress(), bank.getComment(), bank.getDate());
     }
 
     public static Konto convertFromKontoDAO(KontoDAO kontoDAO){
         Konto konto = new Konto();
-        konto.setIsbn(kontoDAO.getIsbn());
-        konto.setComment(kontoDAO.getComment());
-        konto.setDate(kontoDAO.getDate());
+        konto.setId(kontoDAO.id());
+        konto.setIsbn(kontoDAO.isbn());
+        konto.setComment(kontoDAO.comment());
+        konto.setDate(kontoDAO.date());
         return konto;
     }
 
     public static KontoDAO convertFromKonto(Konto konto){
-        KontoDAO kontoDAO = new KontoDAO();
-        kontoDAO.setIsbn(konto.getIsbn());
-        kontoDAO.setComment(konto.getComment());
-        kontoDAO.setDate(konto.getDate());
-        return kontoDAO;
+        return new KontoDAO(konto.getId(), konto.getIsbn(), konto.getComment(), konto.getDate());
     }
 
+    public static BuchungssatzDAO convertFromBuchungssatz(Buchungssatz buchungssatz){
+        BuchungssatzDAO buchungssatzDao = new BuchungssatzDAO();
+        buchungssatzDao.setId(buchungssatz.getId());
+        buchungssatzDao.setBuchungsart(buchungssatz.getBuchungsart());
+        buchungssatzDao.setBuchungstext(buchungssatz.getBuchungstext());
+        buchungssatzDao.setBetrag(buchungssatz.getBetrag());
+        buchungssatzDao.setWaehrung(buchungssatz.getWaehrung());
+        buchungssatzDao.setBuchungsdatum(buchungssatz.getBuchungsdatum());
+        return buchungssatzDao;
+    }
 
+    public static Buchungssatz convertFromBuchungssatzDAO(BuchungssatzDAO buchungssatzDAO){
+        Buchungssatz buchungssatz = new Buchungssatz();
+        buchungssatz.setId(buchungssatzDAO.getId());
+        buchungssatz.setBuchungsart(buchungssatzDAO.getBuchungsart());
+        buchungssatz.setBuchungstext(buchungssatzDAO.getBuchungstext());
+        buchungssatz.setBetrag(buchungssatzDAO.getBetrag());
+        buchungssatz.setWaehrung(buchungssatzDAO.getWaehrung());
+        buchungssatz.setBuchungsdatum(buchungssatzDAO.getBuchungsdatum());
+        return buchungssatz;
+    }
 
 }

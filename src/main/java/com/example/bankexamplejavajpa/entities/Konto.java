@@ -1,19 +1,15 @@
 package com.example.bankexamplejavajpa.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name="konto")
-@NoArgsConstructor
-@AllArgsConstructor
 public class Konto {
 
     @Id
@@ -23,10 +19,10 @@ public class Konto {
     private String comment;
     private LocalDate date;
 
-//    @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE,
-//                CascadeType.DETACH, CascadeType.REFRESH})
-//    @JoinColumn(name = "bank_id")
     @ManyToOne
     private Bank bank;
+
+    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+    private List<Buchungssatz> buchungssaetze = new ArrayList<>();
 
 }

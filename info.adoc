@@ -1,0 +1,9 @@
+https://www.bezkoder.com/spring-boot-jpa-crud-rest-api/
+
+Container für Tests und die lokale Entwicklung mit Spring Boot 3.1
+https://www.innoq.com/de/articles/2023/09/spring-boot-testcontainers-and-docker-compose/
+
+Frontent-maven-plugin
+https://github.com/eirslett/frontend-maven-plugin
+
+./mvnw

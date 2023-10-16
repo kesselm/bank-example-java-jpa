@@ -6,17 +6,19 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DummyEntitiesBuilder {
 
     public static Bank getExampleBankObject(){
         Bank bank = new Bank();
+        bank.setId(1L);
         bank.setName("bank");
         bank.setAddress("address");
         bank.setComment("comment");
-        bank.setDate(LocalDate.of(2023,10,07));
-        bank.getKontos().add(getExampleKontoObject());
+        bank.setDate(LocalDate.of(2023,10,7));
+        bank.setKontos(List.of(getExampleKontoObject()));
         return bank;
     }
 

@@ -9,9 +9,9 @@ import java.util.Optional;
 public interface BankService {
 
     Bank saveBank(Bank bank);
-    List<Bank> getBankList();
-    Optional<Bank> getBankById(Long id);
+    List<Bank> findAllBanks();
+    Optional<Bank> findBankById(Long id);
     void deleteBank(Bank bank);
     void deleteBankById(Long id);
-    List<Konto> getKontoList(Long id);
+    List<Konto> findKonten(Long id);
 }

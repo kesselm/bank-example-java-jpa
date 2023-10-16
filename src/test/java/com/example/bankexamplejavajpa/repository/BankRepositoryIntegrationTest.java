@@ -1,6 +1,7 @@
 package com.example.bankexamplejavajpa.repository;
 
 import com.example.bankexamplejavajpa.entities.Bank;
+import com.example.bankexamplejavajpa.entities.Buchungssatz;
 import com.example.bankexamplejavajpa.entities.Konto;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.Optional;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Testcontainers
 @ActiveProfiles("dev")
-public class BankRepositoryIntegrationTest {
+class BankRepositoryIntegrationTest {
 
     @Container
     static PostgreSQLContainer postgresqlContainer = new PostgreSQLContainer("postgres:15.2-alpine");
@@ -36,17 +38,29 @@ public class BankRepositoryIntegrationTest {
     @Autowired
     private BankRepository bankRepository;
 
+    @Autowired
+    private KontoRepository kontoRepository;
+
     @Test
-    public void testOnPostgresql() {
+    void testOnPostgresql() {
         assertThat(bankRepository.findAll()).hasSize(5);
     }
 
     @Test
     @Transactional
-    public void testOneToMany() {
+    void getKontenForBank() {
         Optional<Bank> bankOptional = bankRepository.findById(1L);
         Bank bank = bankOptional.get();
-        Konto konto = bank.kontos.get(1);
-        assertThat(konto.getComment()).isEqualTo("Konto 2");
+        List<Konto> konten = bank.getKontos();
+        assertThat(konten).hasSize(4);
+    }
+
+    @Test
+    @Transactional
+    void getBuchungssaetzeForKonto() {
+        Optional<Konto> kontoOptional = kontoRepository.findById(1L);
+        Konto konto = kontoOptional.get();
+        List<Buchungssatz> buchungssaetze = konto.getBuchungssaetze();
+        assertThat(buchungssaetze).hasSize(10);
     }
 }
