@@ -1,5 +1,6 @@
 package com.example.bankexamplejavajpa.controller;
 
+import com.example.bankexamplejavajpa.controller.doc.KontoControllerDoc;
 import com.example.bankexamplejavajpa.dao.BankDAO;
 import com.example.bankexamplejavajpa.dao.BuchungssatzDAO;
 import com.example.bankexamplejavajpa.dao.KontoDAO;
@@ -8,12 +9,6 @@ import com.example.bankexamplejavajpa.entities.Konto;
 import com.example.bankexamplejavajpa.service.interfaces.KontoService;
 import com.example.bankexamplejavajpa.util.EntityUtils;
 import com.example.bankexamplejavajpa.util.WebConstants;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,8 +19,9 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping(WebConstants.BASE_URL)
 @Slf4j
-public class KontoController {
+public class KontoController implements KontoControllerDoc {
 
     private final KontoService kontoService;
 
@@ -33,32 +29,12 @@ public class KontoController {
         this.kontoService = kontoService;
     }
 
-    //
-    @Operation(
-            summary = "Create a new konto entity.",
-            description = "Create a new konto entity.",
-            tags = {"Konto"}
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", content = {@Content(schema = @Schema(implementation = KontoDAO.class), mediaType = "application/json")}),
-            @ApiResponse(responseCode = "400", content = {@Content(schema = @Schema())})
-    })
     @PostMapping(WebConstants.SAVE_KONTO)
     public KontoDAO saveKonto(@Valid @RequestBody KontoDAO kontoDAO) {
         Konto konto = kontoService.saveKonto(EntityUtils.convertFromKontoDAO(kontoDAO));
         return EntityUtils.convertFromKonto(konto);
     }
 
-    @Operation(
-            summary = "Get all Konten.",
-            description = "Get all Konten.",
-            tags = {"Konto"}
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(
-                    schema = @Schema(implementation = KontoDAO.class)), mediaType = "application/json")}),
-            @ApiResponse(responseCode = "204", content = {@Content(schema = @Schema())})
-    })
     @GetMapping(WebConstants.GET_ALL_KONTEN)
     @ResponseBody
     public ResponseEntity<List<KontoDAO>> getKonten() {
@@ -72,15 +48,6 @@ public class KontoController {
         }
     }
 
-    @Operation(
-            summary = "Get a konto by identifier.",
-            description = "Get a konto by identifier.",
-            tags = {"Konto"}
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = KontoDAO.class), mediaType = "application/json")}),
-            @ApiResponse(responseCode = "204", content = {@Content(schema = @Schema())})
-    })
     @GetMapping(WebConstants.GET_KONTO_BY_ID)
     public ResponseEntity<KontoDAO> getKontoById(@PathVariable Long id) {
         Optional<Konto> konto = kontoService.getKontoById(id);
@@ -92,41 +59,17 @@ public class KontoController {
         }
     }
 
-    @Operation(
-            summary = "Delete a konto by identifier.",
-            description = "Delete a konto by identifier.",
-            tags = {"Konto"}
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = KontoDAO.class), mediaType = "application/json")}),
-    })
+
     @DeleteMapping(WebConstants.DELETE_KONTO)
     public void deleteKonto(@RequestBody KontoDAO kontoDAO) {
         kontoService.deleteKonto(EntityUtils.convertFromKontoDAO(kontoDAO));
     }
 
-    @Operation(
-            summary = "Delete a konto by identifier.",
-            description = "Delete a konto by identifier.",
-            tags = {"Konto"}
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = KontoDAO.class), mediaType = "application/json")})
-    })
     @DeleteMapping(WebConstants.DELETE_KONTO_BY_ID)
     public void deleteBankById(@PathVariable Long id) {
         kontoService.deleteKontoById(id);
     }
 
-    @Operation(
-            summary = "Update a konto.",
-            description = "Update a konto.",
-            tags = {"Konto"}
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = BankDAO.class), mediaType = "application/json")}),
-            @ApiResponse(responseCode = "204", content = {@Content(schema = @Schema())})
-    })
     @PutMapping(WebConstants.UPDATE_KONTO)
     public ResponseEntity<KontoDAO> updateKonto(@RequestBody KontoDAO kontoDAO) {
         Optional<Konto> kontoOptional = kontoService.getKontoById(kontoDAO.id());
@@ -143,16 +86,6 @@ public class KontoController {
         }
     }
 
-    @Operation(
-            summary = "Get bank entity related to the konto object.",
-            description = "Get bank entity related to the konto object.",
-            tags = {"Konto"}
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(
-                    schema = @Schema(implementation = KontoDAO.class)), mediaType = "application/json")}),
-            @ApiResponse(responseCode = "204", content = {@Content(schema = @Schema())})
-    })
     @GetMapping(WebConstants.GET_BANK_FOR_KONTO)
     public ResponseEntity<BankDAO> getBank(@PathVariable Long id) {
         Optional<Bank> bankOptional = kontoService.getBankFromKonto(id);
@@ -163,16 +96,6 @@ public class KontoController {
         }
     }
 
-    @Operation(
-            summary = "Get buchungssatz entities related to the konto object.",
-            description = "Get buchungssatz entities related to the konto object.",
-            tags = {"Konto"}
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(
-                    schema = @Schema(implementation = KontoDAO.class)), mediaType = "application/json")}),
-            @ApiResponse(responseCode = "204", content = {@Content(schema = @Schema())})
-    })
     @GetMapping(WebConstants.GET_BUCHUNGSSAETZE)
     public ResponseEntity<List<BuchungssatzDAO>> getBuchungssaetze(@PathVariable Long id) {
         List<BuchungssatzDAO> buchungssatz = kontoService.getBuchungsaetzeFromKonto(id)

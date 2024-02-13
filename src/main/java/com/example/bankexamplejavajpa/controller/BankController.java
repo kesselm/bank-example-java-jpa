@@ -1,5 +1,6 @@
 package com.example.bankexamplejavajpa.controller;
 
+import com.example.bankexamplejavajpa.controller.doc.BankControllerDoc;
 import com.example.bankexamplejavajpa.dao.BankDAO;
 import com.example.bankexamplejavajpa.dao.KontoDAO;
 import com.example.bankexamplejavajpa.entities.Bank;
@@ -7,13 +8,6 @@ import com.example.bankexamplejavajpa.entities.Konto;
 import com.example.bankexamplejavajpa.service.interfaces.BankService;
 import com.example.bankexamplejavajpa.util.EntityUtils;
 import com.example.bankexamplejavajpa.util.WebConstants;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,8 +22,9 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
+@RequestMapping(WebConstants.BASE_URL)
 @Slf4j
-public class BankController {
+public class BankController implements BankControllerDoc {
 
     private final BankService bankService;
 
@@ -37,15 +32,7 @@ public class BankController {
         this.bankService = bankService;
     }
 
-    @Operation(
-            summary = "Create a new bank entity.",
-            description = "Create a new bank entity.",
-            tags = {"Bank"}
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", content = {@Content(schema = @Schema(implementation = BankDAO.class), mediaType = "application/json")}),
-            @ApiResponse(responseCode = "400", content = {@Content(schema = @Schema())})
-    })
+
     @PostMapping(WebConstants.SAVE_BANK)
     @ResponseStatus(HttpStatus.CREATED)
     public BankDAO saveBank(@Valid @RequestBody BankDAO bankDAO) {
@@ -53,16 +40,7 @@ public class BankController {
         return EntityUtils.convertFromBank(bank);
     }
 
-    @Operation(
-            summary = "Get all bank accounts",
-            description = "Get all bank accounts",
-            tags = {"Bank"}
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(
-                    schema = @Schema(implementation = BankDAO.class)), mediaType = "application/json")}),
-            @ApiResponse(responseCode = "204", content = {@Content(schema = @Schema())})
-    })
+
     @GetMapping(WebConstants.GET_ALL_BANKS)
     public ResponseEntity<List<BankDAO>> findAllBanks() {
         List<BankDAO> banks = bankService.findAllBanks()
@@ -75,15 +53,6 @@ public class BankController {
         }
     }
 
-    @Operation(
-            summary = "Get a bank account by identifier.",
-            description = "Get a bank account by identifier.",
-            tags = {"Bank"}
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = BankDAO.class), mediaType = "application/json")}),
-            @ApiResponse(responseCode = "204", content = {@Content(schema = @Schema())})
-    })
     @GetMapping(WebConstants.GET_BANK_BY_ID)
     public ResponseEntity<BankDAO> findBankById(@PathVariable Long id) {
         Optional<Bank> bank = bankService.findBankById(id);
@@ -95,41 +64,16 @@ public class BankController {
         }
     }
 
-    @Operation(
-            summary = "Delete a bank account.",
-            description = "Delete a bank account.",
-            tags = {"Bank"}
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = BankDAO.class), mediaType = "application/json")})
-    })
     @DeleteMapping(WebConstants.DELETE_BANK)
     public void deleteBank(@RequestBody BankDAO bankDAO) {
         bankService.deleteBank(EntityUtils.convertFromBankDAO(bankDAO));
     }
 
-    @Operation(
-            summary = "Delete a bank account by identifier.",
-            description = "Delete a bank account by identifier.",
-            tags = {"Bank"}
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = BankDAO.class), mediaType = "application/json")})
-    })
     @DeleteMapping(WebConstants.DELETE_BANK_BY_ID)
     public void deleteBankById(@PathVariable Long id) {
         bankService.deleteBankById(id);
     }
 
-    @Operation(
-            summary = "Update a bank account.",
-            description = "Update a bank account.",
-            tags = {"Bank"}
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = BankDAO.class), mediaType = "application/json")}),
-            @ApiResponse(responseCode = "204", content = {@Content(schema = @Schema())})
-    })
     @PutMapping(WebConstants.UPDATE_BANK)
     public ResponseEntity<BankDAO> updateBank(@RequestBody BankDAO bankDAO) {
         Optional<Bank> bankOptional = bankService.findBankById(bankDAO.id());
@@ -154,16 +98,6 @@ public class BankController {
         }
     }
 
-    @Operation(
-            summary = "Get konto entities related to the bank object.",
-            description = "Get konto entites related to the bank object.",
-            tags = {"Bank"}
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(
-                    schema = @Schema(implementation = KontoDAO.class)), mediaType = "application/json")}),
-            @ApiResponse(responseCode = "204", content = {@Content(schema = @Schema())})
-    })
     @GetMapping(WebConstants.GET_KONTEN)
     public ResponseEntity<List<KontoDAO>> findKontenByBank(@PathVariable Long id) {
         List<Konto> konten = bankService.findKonten(id);
